@@ -5,11 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
 	// Open the CSV file
-	file, err := os.Open("results_with_KIF.csv")
+	file, err := os.Open("results.csv")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -31,6 +32,8 @@ func main() {
 	for _, record := range records[1:] {
 		m := make(map[string]interface{})
 		for i, value := range record {
+			// Remove single quotes from the value
+			value = strings.ReplaceAll(value, "'", "")
 			// Check if value is a JSON object
 			var jsonMap map[string]interface{}
 			if json.Unmarshal([]byte(value), &jsonMap) == nil {
